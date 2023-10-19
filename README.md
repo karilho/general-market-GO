@@ -1,17 +1,24 @@
-# general-market-GO
-This is a general purpose use market Backend API.
+# General Market GO
+This is my personal project to learn Golang and some concepts of microservices, DDD, Cloud Deployment and others.
 
 ## How it was planned?
-<a href="https://ibb.co/SVpwnmX"><img src="https://i.ibb.co/BTR2Z6V/template.png" alt="template" border="0"></a>
 
-First, we have 2 types of users: Buyers and Sellers.
+<a href="https://ibb.co/3yHYMNN"><img src="https://i.ibb.co/fY7Gnpp/example.png" alt="example" border="0"></a>
 
-Buyers can buy products directly or from Sellers (Not implemented yet), and this generates a buyer_order.
+The central point is a BUYER, that can buy products from the market.
 
-Buyer order table references the purchased products, and this stable stores the quantity of each product and price 
-of them at the moment of the purchase.
+When a buyer buys a product, he generate a buy_order, with the total value and order date.
 
-And we have too product table, that stores the products that are available to be purchased.
+We have too a purchased_products table, that stores the products that were purchased in each buy_order, individual price and quantity
 
- 
+### Desnormalization Decision
 
+I choose this because i think make relationships between tables it's a not necessary for now, but probably i will add this in the future.
+
+## Goals
+
+* [] Make API WORK doing some CRUD operations.
+* [] A simple frontend to communicate with the API.
+* [] Deploy on the Dockerhub
+* [] Deploy on the AWS using Localstack
+* [] Create some funtions to use some main AWS features like Lambda, SQS
