@@ -16,17 +16,16 @@ func NewService(usersRepo repo.Users) Service {
 	}
 }
 
-/*
-	func (s Service) UpsertUser(ctx context.Context, user domain.User) (userID int, _ error) {
-		userID, err := s.usersRepo.UpsertUser(ctx, user)
-		if err != nil {
-			return 0, err
-		}
-
-		//implement log
-		return userID, nil
+func (s Service) UpsertUser(ctx context.Context, user domain.User) (userID int, _ error) {
+	userID, err := s.usersRepo.UpsertUser(ctx, user)
+	if err != nil {
+		return 0, err
 	}
-*/
+
+	//implement log
+	return userID, nil
+}
+
 func (s Service) GetUser(ctx context.Context, userID int) (domain.User, error) {
 	user, err := s.usersRepo.GetUser(ctx, userID)
 	if err != nil {
