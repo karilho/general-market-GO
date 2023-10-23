@@ -68,3 +68,11 @@ CREATE TABLE IF NOT EXISTS purchased_products (
 --    user_id INT,
 --    FOREIGN KEY (user_id) REFERENCES USER_DATA(user_id)
 --    );
+
+
+-- Just for testing
+CREATE TABLE users (
+       id SERIAL PRIMARY KEY,
+       name VARCHAR(50) NOT NULL,
+       email VARCHAR(50) NOT NULL
+);

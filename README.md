@@ -22,3 +22,9 @@ I choose this because i think make relationships between tables it's a not neces
 * [] Deploy on the Dockerhub
 * [] Deploy on the AWS using Localstack
 * [] Create some funtions to use some main AWS features like Lambda, SQS
+
+``` 
+CURL EXAMPLES
+
+curl --location --request POST 'http://localhost:8080/buyers' \
+```

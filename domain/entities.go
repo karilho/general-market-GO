@@ -5,9 +5,9 @@ import "time"
 type UserType string
 
 type User struct {
-	UserID      int      `json:"user_id"`
-	CurrentType UserType `json:"current_type"`
-	Username    string   `json:"username"`
+	ID    int    `ksql:"id"`
+	Name  string `ksql:"name"`
+	Email string `ksql:"email"`
 }
 
 type UserData struct {

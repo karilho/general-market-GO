@@ -6,10 +6,12 @@ import (
 	"github.com/karilho/general-market-GO/domain"
 )
 
+// Service is the struct that implements the business logic for the users domain.
 type Service struct {
 	usersRepo repo.Users
 }
 
+// Call the repository to use on services, like a @Autowired.
 func NewService(usersRepo repo.Users) Service {
 	return Service{
 		usersRepo: usersRepo,
