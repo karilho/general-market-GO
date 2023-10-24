@@ -53,11 +53,14 @@ func upsertUser(ctx context.Context, db ksql.Provider, user domain.User) (userID
 	//now := time.Now()
 	//user.UpdatedAt = &now
 	err := db.Patch(ctx, domain.UsersTable, &user)
-	if err == ksql.ErrRecordNotFound {
+	if err != nil {
 		err = db.Insert(ctx, domain.UsersTable, &user)
-	}
-	if err == ksql.ErrRecordMissingIDs {
-		err = db.Insert(ctx, domain.UsersTable, &user)
+		if err != nil {
+			return 0, domain.InternalErr("unexpected error when saving user", map[string]interface{}{
+				"user":  user,
+				"error": err.Error(),
+			})
+		}
 	}
 
 	if err != nil {
