@@ -1,0 +1,25 @@
+apiVersion: apps/v1 # api utilizada versão 1 para criar nosso POD
+kind: Deployment # tipo de objeto que estamos criando
+metadata: # metadados
+  name: api # nome do deployment (obrigatório),
+  labels: # labels do deployment
+    app: api
+spec: # especificação do deployment my-app
+  selector:
+    matchLabels:
+      app: api # label do pod QUE ELE VAI BUSCAR.
+  ## Daqui em diante, temos um TEMPLATE PARA O POD (caixinha c/container dentro) CRIADO.
+  template:
+      metadata:
+        labels:
+          app: api #label do pod
+      spec:
+        containers: #containers dentro desse POD, normalmente 1 só
+        - name: api
+          image: karilho/general-market-go:1.0
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m" #meia cpu no maximo
+          ports:
+            - containerPort: 8080 #porta exposta no container
