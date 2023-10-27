@@ -16,7 +16,8 @@ func main() {
 
 	// init dependencies
 	var usersRepo repo.Users
-	usersRepo, err := pgrepo.New(ctx, "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable")
+	//TODO -> Fix no nome do service, ficou @postgres por conta do meu service criado no k8s
+	usersRepo, err := pgrepo.New(ctx, "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
