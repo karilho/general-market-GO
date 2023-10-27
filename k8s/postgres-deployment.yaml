@@ -1,0 +1,28 @@
+apiVersion: apps/v1 # api utilizada versão 1 para criar nosso POD
+kind: Deployment # tipo de objeto que estamos criando
+metadata:
+  name: postgres # nome do deployment (obrigatório),
+  labels: # labels do deployment
+    app: postgres
+spec: # especificação do deployment my-app
+  selector:
+    matchLabels:
+      app: postgres # label do pod QUE ELE VAI BUSCAR.
+  ## Daqui em diante, temos um TEMPLATE PARA O POD (caixinha c/container dentro) CRIADO.
+  template:
+      metadata:
+        labels:
+          app: postgres #label do POD
+      spec:
+        containers: #containers dentro desse POD, normalmente 1 só
+        - name: postgres
+          image: postgres:12.1-alpine
+          ports:
+            - containerPort: 5432 #porta exposta no container
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
