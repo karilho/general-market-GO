@@ -31,3 +31,22 @@ curl --location --request POST 'http://localhost:8080/buyers' \
 
 -- > SERVICE - AGRUPA PODS NA REDE INTERNA DO K8S E DA NOME DE DOMINIO PARA ELES PERTIMINDO COMUNICAÇÃO ENTRE ELES
 
+--> CRIAMOS UM SERVICE PARA O POSTGRES
+DEPOIS USAMOS OS SEGUINTES COMANDOS ->
+
+k apply -f service-postgres.yaml 
+## para rodar o service criando um hostname para oS podS do postgres
+
+## depois matamos o pod com:::: é seguro pois o deployment vai recria-lo
+k delete pod nomedopoddaapi
+
+## depois redirecionamos utilizando o port-forward COM O NOME DO POD, inclusive pro banco de dados
+k port-forward nomedopoddaapi 8080:8080
+
+## pegar as configurações de todos os clusters existentes (isso que é deployado no k8s) 
+ k config get-contexts
+
+## troca o contexto do kubectl para o cluster que queremos
+k config use-context nomedocontexto
+
+
