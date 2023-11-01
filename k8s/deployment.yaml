@@ -16,19 +16,9 @@ spec: # especificação do deployment my-app
       spec:
         containers: #containers dentro desse POD, normalmente 1 só
         - name: api
-          image: karilho/general-market-go:2.0
+          image: karilho/general-market-go:3.0
           ports:
             - containerPort: 3000
           env:
-            - name: PORT
-              value: "3000"
-            - name: DB_HOSTNAME
-              value: postgres
-            - name: DB_PORT
-              value: "5432"
-            - name: DB_PASSWORD
-              value: postgres
-            - name: DB_USER
-              value: postgres
-            - name: DB_NAME
-              value: postgres
+            - name: DATABASE_URL
+              value: postgres:postgres@postgres:5432/postgres?sslmode=disable
