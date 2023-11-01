@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: postgres
+spec:
+  selector: # label do pod QUE ELE VAI BUSCAR.
+    app: postgres
+  ports:
+      - protocol: TCP
+        port: 5432 #port que vai receber
+        targetPort: 5432 # port que vai redirecionar

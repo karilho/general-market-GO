@@ -26,3 +26,4 @@ spec: # especificação do deployment my-app
               value: postgres
             - name: POSTGRES_DB
               value: postgres
+              ##colocar só a URL invés de colocar todas variaveis
