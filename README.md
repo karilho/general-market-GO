@@ -34,6 +34,8 @@ curl --location --request POST 'http://localhost:8080/buyers' \
 --> CRIAMOS UM SERVICE PARA O POSTGRES
 DEPOIS USAMOS OS SEGUINTES COMANDOS ->
 
+
+
 k apply -f service-postgres.yaml 
 ## para rodar o service criando um hostname para oS podS do postgres
 

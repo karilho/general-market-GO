@@ -26,4 +26,6 @@ spec: # especificação do deployment my-app
               value: postgres
             - name: POSTGRES_DB
               value: postgres
+            - name: DATABASE_URL
+              value: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
               ##colocar só a URL invés de colocar todas variaveis

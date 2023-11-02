@@ -1,3 +1,4 @@
+-- +migrate Up
 -- Users info table, can be a buyer or a seller.
 -- Type for buyer / seller (not implemented)
 CREATE TYPE user_type AS ENUM ('buyer', 'seller');
