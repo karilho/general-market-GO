@@ -1,4 +1,4 @@
-apiVersion: apps/v1 # api utilizada versão 1 para criar nosso POD
+apiVersion: apps/v1 # Api utilizada versão 1 para criar nosso POD
 kind: Deployment # tipo de objeto que estamos criando
 metadata: # metadados
   name: api # nome do deployment (obrigatório),
@@ -9,6 +9,7 @@ spec: # especificação do deployment my-app
     matchLabels:
       app: api # label do pod QUE ELE VAI BUSCAR.
   ## Daqui em diante, temos um TEMPLATE PARA O POD (caixinha c/container dentro) CRIADO.
+  replicas: 1 #quantidade de replicas
   template:
       metadata:
         labels:
