@@ -1,0 +1,46 @@
+name: api
+
+#critérios de execução, nesse caso, quando houver push ou pull request, ele vai executar o WORKFLOW AQUI DEFINIDO p/ todas branchs
+on: [push, pull_request]
+
+# lista de tarefas
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      # Toda vez que tiver o HIFEN ANTES, É UM STEP(TAREFA), o - significa elemento da lista.
+      # no caso, temos o -uses sendo um elemento, porém sem o name.
+      # 0= uses, 1= uses, 2=run com name de lint, 3= run com name de test
+      # ele faz o checkout dos repos e clone.
+      - uses: actions/checkout@v3
+      # Aqui ele vai instalar o go, e vai usar a versão 1.21, e vai checar se é a última versão.
+      - uses: actions/setup-go@v4
+        with:
+          go-version: "1.21"
+          check-latest: true
+          cache: true
+      # Aqui ele vai chamar o linter padrão do GO que avalia o codigo e vai dar um feedback.
+      - name: lint
+        run: go vet ./...
+      # Aqui ele vai chamar os testes unitários.
+      - name: Test
+        run: go test ./...
+  ## Aqui ele via começar oficialmente, o tal do DOCKER PUSH
+  deploy:
+    needs:
+      - tests
+    runs-on: ubuntu-latest
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event.commits[0].author.name != 'fluxcdbot'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and Deploy
+        run: |
+          IMG="karilho/general-market-go:$(date '+%Y%m%d%H%M%S').$(git rev-parse --short HEAD)"
+          echo "Docker image to publish: $IMG"
+          docker build . -t $IMG
+          echo $DOCKERHUB_TOKEN | docker login -u karilho --password-stdin
+          docker push $IMG
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

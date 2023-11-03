@@ -11,6 +11,7 @@
 6. Criei as migrations diretamente na API, falta implementar um LOCK. 
 7. Criei o deployment e o service da API na porta 3000, mas o ingress vai fazer o redirecionamento para a porta 80.
 
+
 ### Estudos K8S
 
 **O que é um Cluster?**

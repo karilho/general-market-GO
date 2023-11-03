@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/karilho/general-market-GO/adapters/repo"
 	"github.com/karilho/general-market-GO/adapters/repo/pg_repo"
@@ -18,7 +17,6 @@ import (
 func main() {
 	ctx := context.Background()
 	dburl := os.Getenv("DATABASE_URL")
-	fmt.Println("dburl:", dburl)
 	// init dependencies
 	var usersRepo repo.Users
 

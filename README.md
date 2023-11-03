@@ -28,7 +28,6 @@ I choose this because i think make relationships between tables it's a not neces
 * [] Improve API with some features like JWT, Auth, and unity tests
 * [] Create some AWS funtions like Lambda, SQS
 * [] A simple frontend to communicate with the API.
-* 
 
 
 
