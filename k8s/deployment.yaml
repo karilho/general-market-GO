@@ -9,7 +9,7 @@ spec: # especificação do deployment my-app
     matchLabels:
       app: api # label do pod QUE ELE VAI BUSCAR.
   ## Daqui em diante, temos um TEMPLATE PARA O POD (caixinha c/container dentro) CRIADO.
-  replicas: 1 #quantidade de replicas
+  replicas: 2 #quantidade de replicas
   template:
       metadata:
         labels:
@@ -17,7 +17,7 @@ spec: # especificação do deployment my-app
       spec:
         containers: #containers dentro desse POD, normalmente 1 só
         - name: api
-          image: karilho/general-market-go:v1.0.1
+          image: karilho/general-market-go:20231103012147.e845155
           ports:
             - containerPort: 3000
           env:
