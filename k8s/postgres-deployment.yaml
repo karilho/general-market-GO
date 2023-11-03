@@ -2,6 +2,7 @@ apiVersion: apps/v1 # api utilizada versão 1 para criar nosso POD
 kind: Deployment # tipo de objeto que estamos criando
 metadata:
   name: postgres # nome do deployment (obrigatório),
+  namespace: default # namespace onde o deployment vai ser criado, pro FLUX poder ver
   labels: # labels do deployment
     app: postgres
 spec: # especificação do deployment my-app

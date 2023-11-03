@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress
+  namespace: default # namespace onde o deployment vai ser criado, pro FLUX poder ver
   annotations:
     ##ler todos os ingress aplicado no k8s.
     ##Ele quer q o nginx leia
