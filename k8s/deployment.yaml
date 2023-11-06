@@ -12,15 +12,15 @@ spec: # especificação do deployment my-app
   ## Daqui em diante, temos um TEMPLATE PARA O POD (caixinha c/container dentro) CRIADO.
   replicas: 2 #quantidade de replicas
   template:
-      metadata:
-        labels:
-          app: api #label do pod
-      spec:
-        containers: #containers dentro desse POD, normalmente 1 só
-        - name: api
-          image: karilho/general-market-go:20231103012147.e845155 # {"$imagepolicy": "flux-system:general-market-go"}
-          ports:
-            - containerPort: 3000
-          env:
-            - name: DATABASE_URL
-              value: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+    metadata:
+      labels:
+        app: api #label do pod
+    spec:
+      containers: #containers dentro desse POD, normalmente 1 só
+      - name: api
+        image: karilho/general-market-go:20231103022813.b6d1b07 # {"$imagepolicy": "flux-system:general-market-go"}
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DATABASE_URL
+          value: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
