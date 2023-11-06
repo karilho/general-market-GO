@@ -66,3 +66,9 @@ func (c Controller) GetUser(ctx *fiber.Ctx) error {
 		"name": user.Name,
 	})
 }
+
+func (c Controller) HealthCheck(ctx *fiber.Ctx) error {
+	return ctx.JSON(map[string]interface{}{
+		"status": "ok",
+	})
+}
