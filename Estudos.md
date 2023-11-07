@@ -10,7 +10,8 @@
 5. Expus para o exterior fazendo a instalação do  <a href="https://kind.sigs.k8s.io/docs/user/ingress/"> INGRESS </a>.
 6. Criei as migrations diretamente na API, falta implementar um LOCK. 
 7. Criei o deployment e o service da API na porta 3000, mas o ingress vai fazer o redirecionamento para a porta 80.
-
+8. Criei todo o processo de CI/CD com o Github Actions, fazendo o build da imagem e o push para o dockerhub.
+9. Integrei todo o processo com o k8s, utilizando o Flux como auxiliar para deploy da imagem e atualização do mesmo.
 
 ### Estudos K8S
 
@@ -86,7 +87,7 @@ docker rm nomedocontainer
 
 **Remover uma imagem**
 ````
-docker rmi nomedaimagem
+docker rmi nomedaimagemg
 ````
 
 **TAG imagem (não tão funcional)**
@@ -105,4 +106,42 @@ docker login -u "login" -p "pass" docker.io
 docker exec -it nomedocontainer bash
 ````
 
+## Flux
+
+**Passo a passo do que foi feito:**
+
+1. Instalar o fluxctl -><a href="https://fluxcd.io/flux/get-started/ "> Flux </a>
+2. Scan na imagem, auto-atualizações etc -> <a href="https://fluxcd.io/flux/guides/image-update/"> Image update </a>
+
+**Instalar o fluxctl**
+
+Tipo de imagem:
+* GITREPOSITORY: Em resumo, a criação desse objeto GitRepository é uma parte do processo de configuração do Flux CD para sincronizar automaticamente o código do repositório https://github.com/stefanprodan/podinfo com o cluster Kubernetes, garantindo que o cluster esteja sempre atualizado com o código mais recente desse repositório.
+* KUSTOMIZATION:  é usado para definir como personalizar e implantar recursos no cluster Kubernetes com base nos arquivos de personalização presentes no repositório Git referenciado pelo GitRepository chamado "podinfo." Ele define várias configurações, incluindo o intervalo de sincronização, o caminho para os arquivos de personalização, a referência à fonte Git e outras configurações relacionadas à personalização.
+* Validar se o flux tá rodando e olhando pro repo: 
+
+````
+flux get kustomizations --watch
+````
+* Instalar o bootstrap dele para que ele crie o repo com as permissões:
+````
+flux bootstrap github \
+  --components-extra=image-reflector-controller,image-automation-controller \
+  --owner=$GITHUB_USER \
+  --repository=flux-image-updates \
+  --branch=main \
+  --path=clusters/my-cluster \
+  --read-write-key \
+  --personal
+````
+
+* Avisar ao flux para PUXAR a imagem e aplicar as mudanças para detectar suas modificações:
+````
+flux reconcile kustomization flux-system --with-source
+````
+
+* Configurar o image scan para que ele faça o scan da imagem e atualize o flux:
+1. Crie o IMAGEREPOSITORY: Sua função é avisar ao flux qual registro de container ele deve scanear em busca de noas tagsde imagem. Ele também define o intervalo de verificação para o flux verificar se há novas tags de imagem.
+2. Crie o IMAGEPOLICY: Sua função é definir uma política de imagem que o flux deve seguir. Ele define a política de atualização de imagem para o flux, que pode ser automática ou manual, também define a ordem que ele vai pegar as tags (útlima pra mais recente por exemplo).
+3. Crie o IMAGEUPDATEAUTOMATION: Sua função é avisar qual ordem vai ser utilizada quando o FLUX for fazer o update da imagem (adicionar o $imagepolicy no manifesto lá da imagem que tá no repo).
 

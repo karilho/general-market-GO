@@ -24,7 +24,7 @@ I choose this because i think make relationships between tables it's a not neces
 * [x] Make API WORK doing some CRUD operations.
 * [x] Deploy on the Dockerhub
 * [x] Deploy on the AWS using Localstack - CHANGED - Deploy on k8s using KIND
-* [] Make CI/CD deploy with some features like Github Actions
+* [x] Make CI/CD deploy with some features like Github Actions
 * [] Improve API with some features like JWT, Auth, and unity tests
 * [] Create some AWS funtions like Lambda, SQS
 * [] A simple frontend to communicate with the API.

@@ -10,7 +10,7 @@ spec: # especificação do deployment my-app
     matchLabels:
       app: api # label do pod QUE ELE VAI BUSCAR.
   ## Daqui em diante, temos um TEMPLATE PARA O POD (caixinha c/container dentro) CRIADO.
-  replicas: 2 #quantidade de replicas
+  replicas: 1 #quantidade de replicas
   template:
     metadata:
       labels:
