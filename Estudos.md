@@ -145,3 +145,23 @@ flux reconcile kustomization flux-system --with-source
 2. Crie o IMAGEPOLICY: Sua função é definir uma política de imagem que o flux deve seguir. Ele define a política de atualização de imagem para o flux, que pode ser automática ou manual, também define a ordem que ele vai pegar as tags (útlima pra mais recente por exemplo).
 3. Crie o IMAGEUPDATEAUTOMATION: Sua função é avisar qual ordem vai ser utilizada quando o FLUX for fazer o update da imagem (adicionar o $imagepolicy no manifesto lá da imagem que tá no repo).
 
+
+
+// Configurar o SDK - GO e integrar DENTRO DA API
+
+1. Toda vez que fizer uma pretensão de compra, SALVAR O JSON NUM BUCKET DO S3 (só pra usar, poderia mandar direto pro SQS)
+2. Quando for salvo no bucket do s3, trigger um LAMBDA que pega esse JSON DO S3 {} e joga pra uma fila SQS (somente pra evitar condição de corrida)
+3. Componente do LAMBDA (que vai ser criado DENTRO DA AWS), 
+Função = pegar o json do s3, jogar no SQS. 
+Ativação = NOVA ENTRADA NO S3.
+4. Ter um worker do go lendo dessa FILA DO SQS E salvando no DB os efetivados (campo buy order)
+
+POR FIM GARANTIR QUE NÃO HAVERÁ FALHA DE VULNERABILIDADE PRA CRIAR O PONTO 
+
+
+
+
+SQS -> CASO DE USO MAIS COMUM - GARANTIR UM RETRY EM CASO DE FALHA (COM A IMPLEMENTAÇÃO DE UMA DEAD LETTER QUEUE {POSTERIOR})
+LAMBDA -> No caso que eu to esperando um TSUNAMI DE REQUISIÇÃO, MAS moldar todos os prédios pra isso só 1x ao ano não compensa.
+ -> No caso, eu poderia ter um LAMBDA que fica rodando o tempo todo, e quando eu precisar de mais poder de processamento, eu só aumento o número de LAMBDA que eu quero rodando.
+ -> serverless config - modinha que ja passou
