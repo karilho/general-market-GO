@@ -6,6 +6,7 @@ import (
 	"github.com/vingarcia/ksql"
 )
 
+/*
 // This example function shows how we can have a transaction that reuses other repository
 // functions in order to avoid code duplication.
 //
@@ -18,7 +19,7 @@ import (
 // need to know whether the input db is a transaction or not, making it possible
 // to decide whether they will be used inside a transaction or not when we call them.
 
-/*
+
 func changeUserEmail(ctx context.Context, db ksql.Provider, userID int, newEmail string) error {
 	return db.Transaction(ctx, func(db ksql.Provider) error {
 		user, err := getUser(ctx, db, userID)

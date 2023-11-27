@@ -11,46 +11,46 @@ type User struct {
 }
 
 type UserData struct {
-	UserDataID       int       `json:"user_data_id"`
-	CurrentType      UserType  `json:"current_type"`
-	Username         string    `json:"username"`
-	Email            string    `json:"email"`
-	PasswordHash     string    `json:"password_hash"`
-	FullName         string    `json:"full_name"`
-	PhoneNumber      string    `json:"phone_number"`
-	RegistrationDate time.Time `json:"registration_date"`
-	StreetAddress    string    `json:"street_address"`
-	PlaceNumber      string    `json:"place_number"`
-	City             string    `json:"city"`
-	StateProvince    string    `json:"state_province"`
-	PostalCode       string    `json:"postal_code"`
+	UserDataID       int       `ksql:"user_data_id"`
+	CurrentType      string    `ksql:"current_type"`
+	Username         string    `ksql:"username"`
+	Email            string    `ksql:"email"`
+	PasswordHash     string    `ksql:"password_hash"`
+	FullName         string    `ksql:"full_name"`
+	PhoneNumber      string    `ksql:"phone_number"`
+	RegistrationDate time.Time `ksql:"registration_date,timeNowUTC/skipUpdates"`
+	StreetAddress    string    `ksql:"street_address"`
+	PlaceNumber      string    `ksql:"place_number"`
+	City             string    `ksql:"city"`
+	StateProvince    string    `ksql:"state_province"`
+	PostalCode       string    `ksql:"postal_code"`
 }
 
-type Buyer struct {
-	BuyerID      int  `json:"buyer_id"`
-	UserDataID   int  `json:"user_data_id"`
-	HasPurchased bool `json:"has_purchased"`
+type Buyers struct {
+	BuyerID      int  `ksql:"buyer_id"`
+	UserDataID   int  `ksql:"user_data_id"`
+	HasPurchased bool `ksql:"has_purchased"`
 }
 
 type Product struct {
-	ProductID    int     `json:"product_id"`
-	ProductName  string  `json:"product_name"`
-	ProductValue float64 `json:"product_value"`
-	Description  string  `json:"description"`
+	ProductID    int     `ksql:"product_id"`
+	ProductName  string  `ksql:"product_name"`
+	ProductValue float64 `ksql:"product_value"`
+	Description  string  `ksql:"description"`
 }
 
 type BuyOrder struct {
-	BuyOrderID    string    `json:"buy_order_id"`
-	BuyerID       int       `json:"buyer_id"`
-	OrderDate     time.Time `json:"order_date"`
-	TotalValue    float64   `json:"total_value"`
-	PaymentMethod string    `json:"payment_method"`
+	BuyOrderID    string    `ksql:"buy_order_id"`
+	BuyerID       int       `ksql:"buyer_id"`
+	OrderDate     time.Time `ksql:"order_date"`
+	TotalValue    float64   `ksql:"total_value"`
+	PaymentMethod string    `ksql:"payment_method"`
 }
 
 type PurchasedProduct struct {
-	PurchasedProductID int     `json:"purchased_product_id"`
-	BuyOrderID         int     `json:"buy_order_id"`
-	ProductID          int     `json:"product_id"`
-	Quantity           int     `json:"quantity"`
-	ValuePerUnit       float64 `json:"value_per_unit"`
+	PurchasedProductID int     `ksql:"purchased_product_id"`
+	BuyOrderID         int     `ksql:"buy_order_id"`
+	ProductID          int     `ksql:"product_id"`
+	Quantity           int     `ksql:"quantity"`
+	ValuePerUnit       float64 `ksql:"value_per_unit"`
 }
