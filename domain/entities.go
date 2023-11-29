@@ -30,6 +30,7 @@ type Buyers struct {
 	BuyerID      int  `ksql:"buyer_id"`
 	UserDataID   int  `ksql:"user_data_id"`
 	HasPurchased bool `ksql:"has_purchased"`
+	*UserData
 }
 
 type Product struct {

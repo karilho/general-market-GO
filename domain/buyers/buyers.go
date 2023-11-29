@@ -43,10 +43,10 @@ func (s Service) UpsertBuyer(ctx context.Context, buyer domain.Buyers) (buyerId 
 	return buyerId, nil
 }
 
-func (s Service) GetBuyer(ctx context.Context, buyerID int) (map[string]any, error) {
+func (s Service) GetBuyer(ctx context.Context, buyerID int) (domain.Buyers, error) {
 	buyer, err := s.buyersRepo.GetBuyer(ctx, buyerID)
 	if err != nil {
-		return map[string]interface{}{}, err
+		return domain.Buyers{}, err
 	}
 	return buyer, nil
 }

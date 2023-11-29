@@ -40,6 +40,6 @@ func (r Repositories) UpsertUserData(ctx context.Context, userData domain.UserDa
 	return upsertData(ctx, r.db, userData)
 }
 
-func (r Repositories) GetBuyer(ctx context.Context, buyerID int) (map[string]any, error) {
+func (r Repositories) GetBuyer(ctx context.Context, buyerID int) (domain.Buyers, error) {
 	return getBuyer(ctx, r.db, buyerID)
 }
