@@ -2,6 +2,10 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/karilho/general-market-GO/adapters/repo/pg_repo"
@@ -22,8 +26,11 @@ func main() {
 		log.Fatal("Error loading .env file", err)
 	}
 
+	awsCredentials := os.Getenv("AWS_ACCESS_KEY_ID" + "              " + "AWS_SECRET_ACCESS_KEY")
+
 	dburl := os.Getenv("DATABASE_URL")
 
+	fmt.Println(awsCredentials)
 	pgrepo.MigrateDB(http.FS(migrationsSQL.MigrationsDir), dburl)
 
 	repositories, err := pgrepo.New(ctx, dburl)
@@ -39,10 +46,50 @@ func main() {
 		controllers.NewBuyerController(buyerService),
 	}
 
+	CreateS3Bucket()
+
 	app := fiber.New()
 	routes.InitRoutes(app, controllersInit)
 
 	if err := app.Listen(":3000"); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func CreateS3Bucket() {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("us-west-2"),
+	})
+	if err != nil {
+		log.Fatalf("Failed to connect to AWS: %s", err.Error())
+	}
+
+	s3Client := s3.New(sess)
+
+	bucketName := "my-new-bucket-testt"
+
+	_, err = s3Client.HeadBucket(&s3.HeadBucketInput{
+		Bucket: aws.String(bucketName),
+	})
+	if err == nil {
+		log.Println("Bucket already exists, skipping creation")
+		return
+	}
+
+	_, err = s3Client.CreateBucket(&s3.CreateBucketInput{
+		Bucket: aws.String(bucketName),
+	})
+	if err != nil {
+		log.Fatalf("Failed to create bucket: %s", err.Error())
+	}
+
+	err = s3Client.WaitUntilBucketExists(&s3.HeadBucketInput{
+		Bucket: aws.String(bucketName),
+	})
+	if err != nil {
+		log.Fatalf("Failed to wait for bucket to exist: %s", err.Error())
+	}
+
+	log.Println("Bucket created successfully")
+
 }
