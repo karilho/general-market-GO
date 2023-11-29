@@ -7,38 +7,37 @@ import (
 	"github.com/vingarcia/ksql/adapters/kpgx"
 )
 
-// UsersRepo implements the repo.Users interface by using the ksql database.
-type UsersRepo struct {
+type Repositories struct {
 	db ksql.Provider
 }
 
-// New instantiates a new UsersRepo
-func New(ctx context.Context, postgresURL string) (UsersRepo, error) {
+func New(ctx context.Context, postgresURL string) (Repositories, error) {
 	db, err := kpgx.New(ctx, postgresURL, ksql.Config{})
 	if err != nil {
-		return UsersRepo{}, err
+		return Repositories{}, err
 	}
 
-	return UsersRepo{
+	return Repositories{
 		db: db,
 	}, nil
 }
 
-func (u UsersRepo) UpsertUser(ctx context.Context, user domain.User) (userID int, _ error) {
-	return upsertUser(ctx, u.db, user)
+func (r Repositories) UpsertUser(ctx context.Context, user domain.User) (userID int, _ error) {
+	return upsertUser(ctx, r.db, user)
 }
 
-func (u UsersRepo) GetUser(ctx context.Context, userID int) (domain.User, error) {
-	return getUser(ctx, u.db, userID)
+func (r Repositories) GetUser(ctx context.Context, userID int) (domain.User, error) {
+	return getUser(ctx, r.db, userID)
 }
 
-func (u UsersRepo) GetUserByEmail(ctx context.Context, email string) (domain.User, error) {
-	return getUserByEmail(ctx, u.db, email)
+func (r Repositories) UpsertBuyer(ctx context.Context, buyer domain.Buyers) (buyerID int, _ error) {
+	return upsertBuyer(ctx, r.db, buyer)
 }
 
-/*
-// ChangeUserEmail implements the repo.Users interface
-func (u UsersRepo) ChangeUserEmail(ctx context.Context, userID int, newEmail string) error {
-	return changeUserEmail(ctx, u.db, userID, newEmail)
+func (r Repositories) UpsertUserData(ctx context.Context, userData domain.UserData) (userDataID int, _ error) {
+	return upsertData(ctx, r.db, userData)
 }
-*/
+
+func (r Repositories) GetBuyer(ctx context.Context, buyerID int) (domain.Buyers, error) {
+	return getBuyer(ctx, r.db, buyerID)
+}

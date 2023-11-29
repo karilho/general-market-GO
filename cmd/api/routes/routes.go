@@ -2,19 +2,11 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/karilho/general-market-GO/cmd/api/userctrll"
+	"github.com/karilho/general-market-GO/cmd/api/controllers"
 )
 
-func InitRoutes(app *fiber.App, userController userctrll.Controller) {
-
-	//User CRUD Routes
-	app.Post("/create", userController.UpsertUser)
-	app.Get("/getUser/:userId", userController.GetUser)
-	app.Get("/healthcheck", userController.HealthCheck)
-	//app.Get("/getUserByEmail/:userEmail", userController.FindUserByEmail)
-	//app.Put("/updateUser/:userId", model.VerifyTokenMiddleware, userController.UpdateUser)
-	//app.Delete("/:userId", model.VerifyTokenMiddleware, userController.DeleteUser)
-
-	//Login Route
-	//app.Post("/login", userController.LoginUser)
+func InitRoutes(app *fiber.App, controllers []controllers.Controller) {
+	for _, controller := range controllers {
+		controller.RegisterRoutes(app)
+	}
 }

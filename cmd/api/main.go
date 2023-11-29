@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"github.com/gofiber/fiber/v2"
-	"github.com/karilho/general-market-GO/adapters/repo"
+	"github.com/joho/godotenv"
 	"github.com/karilho/general-market-GO/adapters/repo/pg_repo"
+	"github.com/karilho/general-market-GO/cmd/api/controllers"
 	"github.com/karilho/general-market-GO/cmd/api/routes"
-	"github.com/karilho/general-market-GO/cmd/api/userctrll"
+	"github.com/karilho/general-market-GO/domain/buyers"
 	"github.com/karilho/general-market-GO/domain/users"
 	"github.com/karilho/general-market-GO/migrationsSQL"
 	"log"
@@ -16,30 +17,32 @@ import (
 
 func main() {
 	ctx := context.Background()
-	dburl := os.Getenv("DATABASE_URL")
-	// init dependencies
-	var usersRepo repo.Users
+	err := godotenv.Load("config.env")
+	if err != nil {
+		log.Fatal("Error loading .env file", err)
+	}
 
-	//migrate database
+	dburl := os.Getenv("DATABASE_URL")
+
 	pgrepo.MigrateDB(http.FS(migrationsSQL.MigrationsDir), dburl)
 
-	//TODO -> Fix no nome do service, ficou @postgres por conta do meu service criado no k8s
-	usersRepo, err := pgrepo.New(ctx, dburl)
+	repositories, err := pgrepo.New(ctx, dburl)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	usersService := users.NewService(usersRepo)
-	userController := userctrll.NewController(usersService)
+	usersService := users.NewUserService(repositories)
+	buyerService := buyers.NewBuyerService(repositories)
 
-	// init API
+	controllersInit := []controllers.Controller{
+		controllers.NewUserController(usersService),
+		controllers.NewBuyerController(buyerService),
+	}
+
 	app := fiber.New()
-	// init routes
-	//Why not working when i put init routes on the same package as main? only when i make a new package?
-	routes.InitRoutes(app, userController)
+	routes.InitRoutes(app, controllersInit)
 
 	if err := app.Listen(":3000"); err != nil {
 		log.Fatal(err)
 	}
-
 }

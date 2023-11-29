@@ -1,4 +1,4 @@
-package userctrll
+package controllers
 
 import (
 	"encoding/json"
@@ -7,20 +7,23 @@ import (
 	"github.com/karilho/general-market-GO/domain/users"
 )
 
-// direct injection of users service
-type Controller struct {
+type UserController struct {
 	usersService users.Service
 }
 
-func NewController(usersService users.Service) Controller {
-	return Controller{
+func NewUserController(usersService users.Service) UserController {
+	return UserController{
 		usersService: usersService,
 	}
 }
 
-func (c Controller) UpsertUser(ctx *fiber.Ctx) error {
-	// Intermediary structure so I don't expose my internal
-	// user representation to the outside world:
+func (c UserController) RegisterRoutes(app *fiber.App) {
+	app.Post("/create", c.UpsertUser)
+	app.Get("/getUser/:userId", c.GetUser)
+	app.Get("/healthcheck", c.HealthCheck)
+}
+
+func (c UserController) UpsertUser(ctx *fiber.Ctx) error {
 	var user struct {
 		UserID int    `json:"user_id"`
 		Name   string `json:"name"`
@@ -34,7 +37,6 @@ func (c Controller) UpsertUser(ctx *fiber.Ctx) error {
 	}
 
 	userID, err := c.usersService.UpsertUser(ctx.Context(), domain.User{
-		// in this case the internal name for the ID attribute is just ID not `UserID`:
 		ID:   user.UserID,
 		Name: user.Name,
 	})
@@ -48,7 +50,7 @@ func (c Controller) UpsertUser(ctx *fiber.Ctx) error {
 	})
 }
 
-func (c Controller) GetUser(ctx *fiber.Ctx) error {
+func (c UserController) GetUser(ctx *fiber.Ctx) error {
 	userID, err := ctx.ParamsInt("id")
 	if err != nil {
 		return domain.BadRequestErr("the input user id is not a valid integer", map[string]interface{}{
@@ -67,7 +69,7 @@ func (c Controller) GetUser(ctx *fiber.Ctx) error {
 	})
 }
 
-func (c Controller) HealthCheck(ctx *fiber.Ctx) error {
+func (c UserController) HealthCheck(ctx *fiber.Ctx) error {
 	return ctx.JSON(map[string]interface{}{
 		"status": "ok",
 	})
