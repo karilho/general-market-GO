@@ -18,12 +18,12 @@ spec: # especificação do deployment my-app
     spec:
       containers: #containers dentro desse POD, normalmente 1 só
       - name: api
-        image: karilho/general-market-go:20231129164309.7919d7d # {"$imagepolicy": "flux-system:general-market-go"}
+        image: karilho/general-market-go:20231129211431.e896726 # {"$imagepolicy": "flux-system:general-market-go"}
         ports:
         - containerPort: 3000
         envFrom:
-          - secretRef:
-              name: api
+        - secretRef:
+            name: api
         env:
         - name: DATABASE_URL
           value: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
