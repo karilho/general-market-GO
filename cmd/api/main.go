@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -21,16 +20,10 @@ import (
 
 func main() {
 	ctx := context.Background()
-	err := godotenv.Load("config.env")
-	if err != nil {
-		log.Fatal("Error loading .env file", err)
-	}
-
-	awsCredentials := os.Getenv("AWS_ACCESS_KEY_ID" + "              " + "AWS_SECRET_ACCESS_KEY")
+	godotenv.Load("config.env")
 
 	dburl := os.Getenv("DATABASE_URL")
 
-	fmt.Println(awsCredentials)
 	pgrepo.MigrateDB(http.FS(migrationsSQL.MigrationsDir), dburl)
 
 	repositories, err := pgrepo.New(ctx, dburl)
