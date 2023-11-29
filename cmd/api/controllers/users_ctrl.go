@@ -7,7 +7,6 @@ import (
 	"github.com/karilho/general-market-GO/domain/users"
 )
 
-// direct injection of users service
 type UserController struct {
 	usersService users.Service
 }
@@ -25,8 +24,6 @@ func (c UserController) RegisterRoutes(app *fiber.App) {
 }
 
 func (c UserController) UpsertUser(ctx *fiber.Ctx) error {
-	// Intermediary structure so I don't expose my internal
-	// user representation to the outside world:
 	var user struct {
 		UserID int    `json:"user_id"`
 		Name   string `json:"name"`
@@ -40,7 +37,6 @@ func (c UserController) UpsertUser(ctx *fiber.Ctx) error {
 	}
 
 	userID, err := c.usersService.UpsertUser(ctx.Context(), domain.User{
-		// in this case the internal name for the ID attribute is just ID not `UserID`:
 		ID:   user.UserID,
 		Name: user.Name,
 	})

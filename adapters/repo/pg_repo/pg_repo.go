@@ -7,12 +7,10 @@ import (
 	"github.com/vingarcia/ksql/adapters/kpgx"
 )
 
-// Repositories implements the repo.Users interface by using the ksql database.
 type Repositories struct {
 	db ksql.Provider
 }
 
-// New instantiates a new Repositories
 func New(ctx context.Context, postgresURL string) (Repositories, error) {
 	db, err := kpgx.New(ctx, postgresURL, ksql.Config{})
 	if err != nil {

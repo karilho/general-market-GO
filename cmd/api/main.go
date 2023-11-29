@@ -21,6 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file", err)
 	}
+
 	dburl := os.Getenv("DATABASE_URL")
 
 	pgrepo.MigrateDB(http.FS(migrationsSQL.MigrationsDir), dburl)
@@ -36,8 +37,6 @@ func main() {
 	controllersInit := []controllers.Controller{
 		controllers.NewUserController(usersService),
 		controllers.NewBuyerController(buyerService),
-		//mais1
-
 	}
 
 	app := fiber.New()
@@ -46,5 +45,4 @@ func main() {
 	if err := app.Listen(":3000"); err != nil {
 		log.Fatal(err)
 	}
-
 }

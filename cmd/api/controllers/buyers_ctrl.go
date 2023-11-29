@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/karilho/general-market-GO/domain"
 	"github.com/karilho/general-market-GO/domain/buyers"
@@ -65,8 +64,6 @@ func (c BuyerController) UpsertBuyer(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("UserDataID: ", UserDataID)
 
 	BuyerId, err := c.buyerService.UpsertBuyer(ctx.Context(), domain.Buyers{
 		UserDataID:   UserDataID,

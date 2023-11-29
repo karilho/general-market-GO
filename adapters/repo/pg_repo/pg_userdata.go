@@ -7,8 +7,6 @@ import (
 )
 
 func upsertData(ctx context.Context, db ksql.Provider, data domain.UserData) (dataId int, _ error) {
-	//now := time.Now()
-	//data.UpdatedAt = &now
 	err := db.Patch(ctx, domain.UserDataTable, &data)
 
 	if err != nil {
@@ -20,13 +18,5 @@ func upsertData(ctx context.Context, db ksql.Provider, data domain.UserData) (da
 			})
 		}
 	}
-
-	if err != nil {
-		return 0, domain.InternalErr("unexpected error when saving data info", map[string]interface{}{
-			"data":  data,
-			"error": err.Error(),
-		})
-	}
-
 	return data.UserDataID, nil
 }

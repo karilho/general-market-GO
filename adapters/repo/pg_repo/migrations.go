@@ -21,5 +21,7 @@ func MigrateDB(migrationsDir http.FileSystem, DBurl string) {
 	if err != nil {
 		panic(err)
 	}
+
+	//TODO -> Put log instead
 	fmt.Printf("Applied %d migrations!\n", n)
 }

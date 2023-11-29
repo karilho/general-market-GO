@@ -7,8 +7,6 @@ import (
 )
 
 func upsertBuyer(ctx context.Context, db ksql.Provider, buyer domain.Buyers) (buyerId int, _ error) {
-	//now := time.Now()
-	//buyer.UpdatedAt = &now
 	err := db.Patch(ctx, domain.BuyersTable, &buyer)
 	if err != nil {
 		err = db.Insert(ctx, domain.BuyersTable, &buyer)

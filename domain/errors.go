@@ -22,17 +22,6 @@ func (e DomainErr) Error() string {
 	return strings.Join(fields, "; ")
 }
 
-func AsDomainErr(err error) DomainErr {
-	domainErr, ok := err.(DomainErr)
-	if ok {
-		return domainErr
-	}
-	return DomainErr{
-		Code:  "InternalErr",
-		Title: err.Error(),
-	}
-}
-
 func InternalErr(title string, data map[string]interface{}) DomainErr {
 	return DomainErr{
 		Code:  "InternalErr",
@@ -44,14 +33,6 @@ func InternalErr(title string, data map[string]interface{}) DomainErr {
 func BadRequestErr(title string, data map[string]interface{}) DomainErr {
 	return DomainErr{
 		Code:  "BadRequestErr",
-		Title: title,
-		Data:  data,
-	}
-}
-
-func UnauthorizedErr(title string, data map[string]interface{}) DomainErr {
-	return DomainErr{
-		Code:  "UnauthorizedErr",
 		Title: title,
 		Data:  data,
 	}

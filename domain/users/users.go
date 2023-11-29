@@ -22,7 +22,6 @@ func (s Service) UpsertUser(ctx context.Context, user domain.User) (userID int, 
 		return 0, err
 	}
 
-	//implement log
 	return userID, nil
 }
 
