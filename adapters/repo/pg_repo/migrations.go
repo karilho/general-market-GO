@@ -3,12 +3,15 @@ package pgrepo
 import (
 	"database/sql"
 	"fmt"
+	"github.com/gofiber/fiber/v2/log"
 	_ "github.com/lib/pq"
 	migrate "github.com/rubenv/sql-migrate"
 	"net/http"
 )
 
 func MigrateDB(migrationsDir http.FileSystem, DBurl string) {
+	log.Info("Starting migrations...")
+
 	migrationSource := &migrate.HttpFileSystemMigrationSource{
 		FileSystem: migrationsDir,
 	}
@@ -22,6 +25,5 @@ func MigrateDB(migrationsDir http.FileSystem, DBurl string) {
 		panic(err)
 	}
 
-	//TODO -> Put log instead
-	fmt.Printf("Applied %d migrations!\n", n)
+	log.Info(fmt.Sprintf("Applied %d migrations!\n", n))
 }

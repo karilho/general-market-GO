@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/karilho/general-market-GO/domain"
 	"github.com/karilho/general-market-GO/domain/buyers"
 	"time"
@@ -25,6 +26,7 @@ func (c BuyerController) RegisterRoutes(app *fiber.App) {
 
 func (c BuyerController) UpsertBuyer(ctx *fiber.Ctx) error {
 
+	log.Info("Starting UpsertBuyer - Controller")
 	var inputUserData struct {
 		CurrentType   string `json:"current_type"`
 		Username      string `json:"username"`
@@ -47,6 +49,7 @@ func (c BuyerController) UpsertBuyer(ctx *fiber.Ctx) error {
 		})
 	}
 
+	log.Info("UpsertBuyer - Controller - UpsertUserData")
 	UserDataID, err := c.buyerService.UpsertUserData(ctx.Context(), domain.UserData{
 		CurrentType:      inputUserData.CurrentType,
 		Username:         inputUserData.Username,
@@ -65,6 +68,7 @@ func (c BuyerController) UpsertBuyer(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	log.Info("UpsertBuyer - Controller - UpsertBuyer")
 	BuyerId, err := c.buyerService.UpsertBuyer(ctx.Context(), domain.Buyers{
 		UserDataID:   UserDataID,
 		HasPurchased: false,
@@ -73,6 +77,7 @@ func (c BuyerController) UpsertBuyer(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	log.Info("UpsertBuyer - Controller - CREATED!")
 	return ctx.JSON(map[string]interface{}{
 		"status":   "success",
 		"buyer_id": BuyerId,

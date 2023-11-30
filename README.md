@@ -25,11 +25,13 @@ I choose this because i think make relationships between tables it's a not neces
 * [x] Deploy on the Dockerhub
 * [x] Deploy on the AWS using Localstack - CHANGED - Deploy on k8s using KIND
 * [x] Make CI/CD deploy with some features like Github Actions
-* [] Improve API with some features, like: CRUD operations for user and products, with unity tests.
-* [] Create some AWS funtions: 
-1. [] S3 Bucket to store JSON + endpoint to call this.
+* [x] Improve API with some features, like: CRUD operations for buyer.
+* [x] Implement logs
+* [x] Create some AWS funtions: 
+1. [x] S3 Bucket to store JSON + endpoint to call this (register buyer)
 2. [] Lambda to get from S3 the JSON file and send to SQS Queue.
 3. [] Worket that runs with Goroutines to get from SQS and send to Postgres.
+* [] Create unity tests.
 * [] Validation using a middleware to give user permissions to call some endpoints.
 * [] A simple frontend to communicate with the API.
 

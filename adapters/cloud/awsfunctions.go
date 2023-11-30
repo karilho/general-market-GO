@@ -13,19 +13,22 @@ type S3StorageService struct {
 }
 
 func NewS3StorageService() *S3StorageService {
+	log.Info("Connecting to AWS")
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("us-west-2"),
 	})
 	if err != nil {
 		log.Fatalf("Failed to connect to AWS: %s", err.Error())
 	}
+	log.Info("Connection to AWS sucessfully")
 	return &S3StorageService{
 		s3Client: s3.New(sess),
 	}
-
 }
 
 func (s *S3StorageService) CreateBucket(bucketName string) error {
+
+	log.Info("Starting bucket creation")
 
 	_, err := s.s3Client.HeadBucket(&s3.HeadBucketInput{
 		Bucket: aws.String(bucketName),
