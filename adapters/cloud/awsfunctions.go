@@ -5,6 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gofiber/fiber/v2/log"
+	"os"
 )
 
 type S3StorageService struct {
@@ -50,4 +51,23 @@ func (s *S3StorageService) CreateBucket(bucketName string) error {
 
 	log.Info("Bucket created successfully")
 	return nil
+}
+
+func (s *S3StorageService) UploadFileToBucket(bucketName, fileName string) error {
+	log.Info("Opening file")
+	file, err := os.Open(fileName)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	log.Info("File: ", file, " opened successfully")
+
+	log.Info("Uploading file to bucket")
+	_, err = s.s3Client.PutObject(&s3.PutObjectInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(fileName),
+		Body:   file,
+	})
+	log.Info("File uploaded successfully")
+	return err
 }

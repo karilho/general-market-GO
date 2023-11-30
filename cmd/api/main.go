@@ -28,17 +28,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	s3Service := cloud.NewS3StorageService()
+	s3Service.CreateBucket("my-new-bucket-test-general-market")
 
 	usersService := users.NewUserService(repositories)
-	buyerService := buyers.NewBuyerService(repositories)
+	buyerService := buyers.NewBuyerService(repositories, s3Service)
 
 	controllersInit := []controllers.Controller{
 		controllers.NewUserController(usersService),
 		controllers.NewBuyerController(buyerService),
 	}
-
-	s3Service := cloud.NewS3StorageService()
-	s3Service.CreateBucket("my-new-bucket-test-general-market")
 
 	app := fiber.New()
 	routes.InitRoutes(app, controllersInit)
