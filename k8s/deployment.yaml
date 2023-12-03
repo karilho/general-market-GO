@@ -18,7 +18,7 @@ spec: # especificação do deployment my-app
     spec:
       containers: #containers dentro desse POD, normalmente 1 só
       - name: api
-        image: karilho/general-market-go:20231130012000.6e90c11 # {"$imagepolicy": "flux-system:general-market-go"}
+        image: karilho/general-market-go:20231203235616.d3eb700 # {"$imagepolicy": "flux-system:general-market-go"}
         ports:
         - containerPort: 3000
         envFrom:
