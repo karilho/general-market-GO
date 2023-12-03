@@ -146,22 +146,40 @@ flux reconcile kustomization flux-system --with-source
 3. Crie o IMAGEUPDATEAUTOMATION: Sua função é avisar qual ordem vai ser utilizada quando o FLUX for fazer o update da imagem (adicionar o $imagepolicy no manifesto lá da imagem que tá no repo).
 
 
+* Pegar o arquivo lambda.go e fazer o build dele para o linux, para que o lambda consiga ler:
+````
+GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o main lambda.go
+````
 
-// Configurar o SDK - GO e integrar DENTRO DA API
+* Criar o zip do arquivo:
 
-1. Toda vez que fizer uma pretensão de compra, SALVAR O JSON NUM BUCKET DO S3 (só pra usar, poderia mandar direto pro SQS)
+````
+ zip nomedozip.zip main
+````
+
+
+1. Toda vez que fizer uma pretensão de compra, SALVAR O JSON NUM BUCKET DO S3 (só pra usar, poderia mandar direto pro SQS) (Posteriormente -> Adicionar serviço de envio de e-mail para cadastrados e sem compras.)
 2. Quando for salvo no bucket do s3, trigger um LAMBDA que pega esse JSON DO S3 {} e joga pra uma fila SQS (somente pra evitar condição de corrida)
 3. Componente do LAMBDA (que vai ser criado DENTRO DA AWS), 
 Função = pegar o json do s3, jogar no SQS. 
 Ativação = NOVA ENTRADA NO S3.
+
+//Todo: Criar o WORKER
+
+
 4. Ter um worker do go lendo dessa FILA DO SQS E salvando no DB os efetivados (campo buy order)
 
-POR FIM GARANTIR QUE NÃO HAVERÁ FALHA DE VULNERABILIDADE PRA CRIAR O PONTO 
 
-
-
+POR FIM GARANTIR QUE NÃO HAVERÁ FALHA DE VULNERABILIDADE PRA CRIAR O PONTO (muitas req)
 
 SQS -> CASO DE USO MAIS COMUM - GARANTIR UM RETRY EM CASO DE FALHA (COM A IMPLEMENTAÇÃO DE UMA DEAD LETTER QUEUE {POSTERIOR})
 LAMBDA -> No caso que eu to esperando um TSUNAMI DE REQUISIÇÃO, MAS moldar todos os prédios pra isso só 1x ao ano não compensa.
  -> No caso, eu poderia ter um LAMBDA que fica rodando o tempo todo, e quando eu precisar de mais poder de processamento, eu só aumento o número de LAMBDA que eu quero rodando.
- -> serverless config - modinha que ja passou
+
+
+### Anotações sobre AWS
+
+* Lembrar de criar um usuário com permissões de administração, e pegar a chave de acesso e a chave secreta.
+* Quando criar um LAMBDA, lembrar de criar uma role para ele, e dar permissão de acesso ao S3 e ao SQS.
+* No Lambda, alterar o runtime settings e colocar MAIN para que ele leia o main do seu codigo.
+* Quando criar, criar com runtime GO mesmo, arquitetura x86

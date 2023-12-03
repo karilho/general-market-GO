@@ -7,7 +7,6 @@ import (
 	"github.com/karilho/general-market-GO/adapters/cloud"
 	"github.com/karilho/general-market-GO/adapters/repo"
 	"github.com/karilho/general-market-GO/domain"
-	"io/ioutil"
 	"os"
 )
 
@@ -44,27 +43,26 @@ func (s Service) UpsertBuyer(ctx context.Context, buyer domain.Buyers) (buyerId 
 		return 0, err
 	}
 
-	// Cria um arquivo temporário
-	tmpfile, err := ioutil.TempFile("", "buyer")
+	fileName := fmt.Sprintf("buyer%d.json", buyer.UserDataID)
+	createdFile, err := os.Create(fileName)
 	if err != nil {
 		return 0, err
 	}
-	defer os.Remove(tmpfile.Name()) // Limpa após o uso
+	defer os.Remove(createdFile.Name())
 
-	if _, err := tmpfile.Write(buyerJSON); err != nil {
+	if _, err := createdFile.Write(buyerJSON); err != nil {
 		return 0, err
 	}
-	if err := tmpfile.Close(); err != nil {
+	if err := createdFile.Close(); err != nil {
 		return 0, err
 	}
 
 	fmt.Println("O json é: ", string(buyerJSON))
 
-	err = s.storageservice.UploadFileToBucket("my-new-bucket-test-general-market", tmpfile.Name())
+	err = s.storageservice.UploadFileToBucket("my-new-bucket-test-general-market", createdFile.Name())
 	if err != nil {
 		return 0, err
 	}
-
 	return 0, nil
 }
 

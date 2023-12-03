@@ -34,6 +34,7 @@ func main() {
 
 	s3Service := cloud.NewS3StorageService()
 	s3Service.CreateBucket("my-new-bucket-test-general-market")
+	s3Service.CreateQueue("my-new-queue-test-general-market")
 
 	log.Info("Starting services / injections...")
 	usersService := users.NewUserService(repositories)
